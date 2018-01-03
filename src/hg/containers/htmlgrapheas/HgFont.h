@@ -49,7 +49,7 @@ public:
   explicit HgFont();
   virtual ~HgFont();
 
-  std::string getFontFilePath(const std::string& name,
+  std::string getFontFilePath(const std::string& names,
       int pixelSize,
       int weight,
       litehtml::font_style fontStyle,

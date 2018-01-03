@@ -23,8 +23,6 @@
 
 #include "HgFont.h"
 
-#include <cstring>
-
 namespace hg
 {
 HgFont::HgFont()
@@ -37,7 +35,7 @@ HgFont::~HgFont()
   FcConfigDestroy(mFcConfig);
 }
 
-std::string HgFont::getFontFilePath(const std::string& name,
+std::string HgFont::getFontFilePath(const std::string& names,
     int pixelSize,
     int weight,
     litehtml::font_style fontStyle,
@@ -45,12 +43,24 @@ std::string HgFont::getFontFilePath(const std::string& name,
 {
   std::string ret = "";
 
-  const FcChar8* fcFamily = reinterpret_cast<const FcChar8*>(name.c_str());
+  litehtml::string_vector fonts;
+  litehtml::split_string(names, fonts, ",");
+  for(litehtml::string_vector::iterator i = fonts.begin(); i != fonts.end();
+      i++) {
+    litehtml::trim(*i);
+  }
+
+  FcPattern* pat = FcPatternCreate();
+
+  for(litehtml::string_vector::iterator i = fonts.begin(); i != fonts.end();
+      i++) {
+    const FcChar8* fcFamily = reinterpret_cast<const FcChar8*>(i->c_str());
+    FcPatternAddString(pat, FC_FAMILY, fcFamily);
+  }
+
   int fcSlant = fontStyleToFcSlant(fontStyle);
   int fcWeight = weightToFcWeight(weight);
 
-  FcPattern* pat = FcPatternCreate();
-  FcPatternAddString(pat, FC_FAMILY, fcFamily);
   FcPatternAddInteger(pat, FC_SLANT, fcSlant);
   FcPatternAddInteger(pat, FC_PIXEL_SIZE, pixelSize);
   FcPatternAddInteger(pat, FC_WEIGHT, fcWeight);
@@ -76,11 +86,20 @@ std::string HgFont::getFontFilePath(const std::string& name,
           *result = FontMatches::allMatched;
 
           if(FcPatternGetString(fontPat, FC_FAMILY, 0, &retFamily)
-                  == FcResultMatch
-              && 0 != strcmp(reinterpret_cast<const char*>(retFamily),
-                          reinterpret_cast<const char*>(fcFamily))) {
-            *result |= FontMatches::notMatchedFaceName;
+              == FcResultMatch) {
+            bool found = false;
+            for(litehtml::string_vector::iterator i = fonts.begin();
+                i != fonts.end(); i++) {
+              if(0 == i->compare(reinterpret_cast<const char*>(retFamily))) {
+                found = true;
+                break;
+              }
+            }
+            if(!found) {
+              *result |= FontMatches::notMatchedFaceName;
+            }
           }
+
           if(FcPatternGetInteger(fontPat, FC_SLANT, 0, &retSlant)
                   == FcResultMatch
               && retSlant != fcSlant) {

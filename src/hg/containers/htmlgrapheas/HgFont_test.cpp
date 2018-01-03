@@ -40,23 +40,23 @@ TEST(HgFontTest, getFontFilePath)
   uint_least8_t result;
   std::string filePath;
 
-  filePath = hgFont.getFontFilePath(
-      "Noto Sans", 16, 400, litehtml::font_style::fontStyleNormal, &result);
+  filePath = hgFont.getFontFilePath("Some Unknown Font, Noto Sans", 16, 400,
+      litehtml::font_style::fontStyleNormal, &result);
   EXPECT_EQ(hg::HgFont::FontMatches::allMatched, result);
   EXPECT_TRUE(ends_with(filePath, "NotoSans-Regular.ttf"));
 
-  filePath = hgFont.getFontFilePath(
-      "Noto Sans", 16, 400, litehtml::font_style::fontStyleItalic, &result);
+  filePath = hgFont.getFontFilePath("Some Unknown Font, Noto Sans", 16, 400,
+      litehtml::font_style::fontStyleItalic, &result);
   EXPECT_EQ(hg::HgFont::FontMatches::allMatched, result);
   EXPECT_TRUE(ends_with(filePath, "NotoSans-Italic.ttf"));
 
-  filePath = hgFont.getFontFilePath(
-      "Noto Sans", 16, 700, litehtml::font_style::fontStyleNormal, &result);
+  filePath = hgFont.getFontFilePath("Some Unknown Font, Noto Sans", 16, 700,
+      litehtml::font_style::fontStyleNormal, &result);
   EXPECT_EQ(hg::HgFont::FontMatches::allMatched, result);
   EXPECT_TRUE(ends_with(filePath, "NotoSans-Bold.ttf"));
 
-  filePath = hgFont.getFontFilePath(
-      "Noto Sans", 16, 700, litehtml::font_style::fontStyleItalic, &result);
+  filePath = hgFont.getFontFilePath("Some Unknown Font, Noto Sans", 16, 700,
+      litehtml::font_style::fontStyleItalic, &result);
   EXPECT_EQ(hg::HgFont::FontMatches::allMatched, result);
   EXPECT_TRUE(ends_with(filePath, "NotoSans-BoldItalic.ttf"));
 }
