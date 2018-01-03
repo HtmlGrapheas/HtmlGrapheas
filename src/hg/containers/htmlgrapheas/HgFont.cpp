@@ -26,12 +26,19 @@
 namespace hg
 {
 HgFont::HgFont()
+    : mFtFace(nullptr)
+    , mHbFont(nullptr)
 {
   mFcConfig = FcInitLoadConfigAndFonts();
+  FT_Init_FreeType(&mFtLibrary);
+  mHbBuffer = hb_buffer_create();
 }
 
 HgFont::~HgFont()
 {
+  destroyFtFace();
+  hb_buffer_destroy(mHbBuffer);
+  FT_Done_FreeType(mFtLibrary);
   FcConfigDestroy(mFcConfig);
 }
 
@@ -123,6 +130,31 @@ std::string HgFont::getFontFilePath(const std::string& names,
   FcPatternDestroy(pat);
 
   return ret;
+}
+
+bool HgFont::createFtFace(std::string& fontFilePath, int pixelSize)
+{
+  bool ret = destroyFtFace()
+      && !FT_New_Face(mFtLibrary, fontFilePath.c_str(), 0, &mFtFace)
+      && !FT_Set_Pixel_Sizes(mFtFace, 0, pixelSize)
+      && (mHbFont = hb_ft_font_create(mFtFace, NULL));
+  if(!ret) {
+    destroyFtFace();
+  }
+  return ret;
+}
+
+bool HgFont::destroyFtFace()
+{
+  if(mHbFont) {
+    hb_font_destroy(mHbFont);
+    mHbFont = nullptr;
+  }
+  if(mFtFace) {
+    FT_Done_Face(mFtFace);
+    mFtFace = nullptr;
+  }
+  return true;
 }
 
 }  // namespace hg

@@ -28,6 +28,14 @@
 #include <memory>
 #include <string>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_GLYPH_H
+#include FT_OUTLINE_H
+
+#include <hb-ft.h>
+#include <hb.h>
+
 #include <fontconfig/fontconfig.h>
 
 #include "litehtml.h"
@@ -55,12 +63,21 @@ public:
       litehtml::font_style fontStyle,
       uint_least8_t* result);
 
+  virtual bool createFtFace(std::string& fontFilePath, int pixelSize);
+  virtual bool destroyFtFace();
+
 private:
   int weightToFcWeight(int weigh);
   int fontStyleToFcSlant(litehtml::font_style fontStyle);
 
 private:
   FcConfig* mFcConfig;
+
+  FT_Library mFtLibrary;
+  FT_Face mFtFace;
+
+  hb_buffer_t* mHbBuffer;
+  hb_font_t* mHbFont;
 };  // class HgFont
 
 inline int HgFont::weightToFcWeight(int weight)

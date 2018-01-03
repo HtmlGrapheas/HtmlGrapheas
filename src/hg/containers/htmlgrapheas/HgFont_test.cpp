@@ -60,3 +60,20 @@ TEST(HgFontTest, getFontFilePath)
   EXPECT_EQ(hg::HgFont::FontMatches::allMatched, result);
   EXPECT_TRUE(ends_with(filePath, "NotoSans-BoldItalic.ttf"));
 }
+
+TEST(HgFontTest, createFtFace)
+{
+  hg::HgFont hgFont;
+  int pixelSize = 16;
+  int weight = 400;
+  litehtml::font_style fontStyle = litehtml::font_style::fontStyleNormal;
+
+  uint_least8_t result;
+  std::string filePath = hgFont.getFontFilePath(
+      "Noto Sans", pixelSize, weight, fontStyle, &result);
+  EXPECT_EQ(hg::HgFont::FontMatches::allMatched, result);
+  EXPECT_TRUE(ends_with(filePath, "NotoSans-Regular.ttf"));
+
+  EXPECT_TRUE(hgFont.createFtFace(filePath, pixelSize));
+  EXPECT_TRUE(hgFont.destroyFtFace());
+}
