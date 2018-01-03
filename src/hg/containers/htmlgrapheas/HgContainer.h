@@ -25,11 +25,11 @@
 
 namespace hg
 {
-class AggContainer : public litehtml::document_container
+class HgContainer : public litehtml::document_container
 {
 public:
-  AggContainer();
-  virtual ~AggContainer();
+  HgContainer();
+  virtual ~HgContainer();
 
   // litehtml::document_container interface.
   virtual litehtml::uint_ptr create_font(const litehtml::tchar_t* faceName,

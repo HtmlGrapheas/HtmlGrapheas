@@ -21,14 +21,14 @@
  *    along with this program. If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-#include "AggContainer.h"
+#include "HgContainer.h"
 
 #include "gtest/gtest.h"
 
-TEST(AggContainerTest, create_font)
+TEST(HgContainerTest, create_font)
 {
   litehtml::font_metrics fm;
-  hg::AggContainer container;
+  hg::HgContainer container;
   litehtml::uint_ptr ptr = container.create_font(
       "Tinos", 0, 0, litehtml::font_style::fontStyleNormal, 0, &fm);
 
