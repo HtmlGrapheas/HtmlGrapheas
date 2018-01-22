@@ -23,10 +23,13 @@
 
 #include "HgContainer.h"
 
+#include "HgFont.h"
+
 namespace hg
 {
 HgContainer::HgContainer(void)
 {
+  mHgFont = std::shared_ptr<HgFont>(new HgFont());
 }
 
 HgContainer::~HgContainer(void)
@@ -40,11 +43,42 @@ litehtml::uint_ptr HgContainer::create_font(const litehtml::tchar_t* faceName,
     unsigned int decoration,
     litehtml::font_metrics* fm)
 {
-  return nullptr;
+  if (!fm) {
+    return nullptr;
+  }
+
+  uint_least8_t result;
+  std::string filePath = mHgFont->getFontFilePath(
+      faceName, size, weight, italic, &result);
+
+  if(hg::HgFont::FontMatches::allMatched != result) {
+    return nullptr;
+  }
+  if(filePath.size() == 0) {
+    return nullptr;
+  }
+  if(!mHgFont->createFtFace(filePath, size)) {
+    return nullptr;
+  }
+
+  // Note: for font metric precision (in particular for TTF) see
+  // https://www.freetype.org/freetype2/docs/reference/ft2-base_interface.html#FT_Size_Metrics
+  FT_Size ftSize = mHgFont->ftFace()->size;
+  fm->ascent = HgFont::f26Dot6ToInt(ftSize->metrics.ascender);
+  fm->descent = HgFont::f26Dot6ToInt(ftSize->metrics.descender);
+  fm->height = HgFont::f26Dot6ToInt(ftSize->metrics.height);
+  fm->x_height = HgFont::f26Dot6ToInt(mHgFont->xHeight());
+
+  mHgFont->setPixelSize(size);
+  mHgFont->setStrikeout(decoration & litehtml::font_decoration_linethrough);
+  mHgFont->setUnderline(decoration & litehtml::font_decoration_underline);
+
+  return static_cast<litehtml::uint_ptr>(&mHgFont);
 }
 
 void HgContainer::delete_font(litehtml::uint_ptr hFont)
 {
+  mHgFont->destroyFtFace();
 }
 
 int HgContainer::text_width(

@@ -30,7 +30,7 @@ TEST(HgContainerTest, create_font)
   litehtml::font_metrics fm;
   hg::HgContainer container;
   litehtml::uint_ptr ptr = container.create_font(
-      "Tinos", 0, 0, litehtml::font_style::fontStyleNormal, 0, &fm);
-
-  EXPECT_EQ(ptr, nullptr);
+      "Noto Sans", 16, 400, litehtml::font_style::fontStyleNormal, 0, &fm);
+  EXPECT_NE(ptr, nullptr);
+  container.delete_font(ptr);
 }

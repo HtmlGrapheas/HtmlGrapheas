@@ -21,10 +21,14 @@
  *    along with this program. If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
+#include <memory>
+
 #include "litehtml.h"
 
 namespace hg
 {
+class HgFont;
+
 class HgContainer : public litehtml::document_container
 {
 public:
@@ -93,6 +97,9 @@ public:
       litehtml::tstring& language, litehtml::tstring& culture) const override;
   //  virtual litehtml::tstring resolve_color(
   //      const litehtml::tstring& color) const override;
-};
+
+private:
+  std::shared_ptr<HgFont> mHgFont;
+}; // class HgContainer
 
 }  // namespace hg

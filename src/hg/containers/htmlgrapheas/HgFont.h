@@ -66,7 +66,7 @@ public:
   virtual bool createFtFace(const std::string& fontFilePath, int pixelSize);
   virtual bool destroyFtFace();
 
-  virtual const FT_Face ftFace() const;
+  virtual const FT_Face ftFace() const { return mFtFace; }
   virtual FT_F26Dot6 xHeight() const;
 
   static FT_F26Dot6 intToF26Dot6(int pixelSize);
@@ -84,12 +84,20 @@ private:
 
   hb_buffer_t* mHbBuffer;
   hb_font_t* mHbFont;
-};  // class HgFont
 
-inline const FT_Face HgFont::ftFace() const
-{
-  return mFtFace;
-}
+  // TODO: get size, strikeout and underline from FT structs if possible, remove it here.
+public:
+  void setPixelSize(int pixelSize) { mPixelSize = pixelSize; }
+  void setUnderline(bool underline) { mUnderline = underline; }
+  void setStrikeout(bool strikeout) { mStrikeout = strikeout; }
+  int pixelSize() { return mPixelSize; }
+  bool underline() { return mUnderline; }
+  bool strikeout() { return mStrikeout; }
+private:
+  int mPixelSize;
+  bool mStrikeout;
+  bool mUnderline;
+};  // class HgFont
 
 inline int HgFont::weightToFcWeight(int weight) const
 {

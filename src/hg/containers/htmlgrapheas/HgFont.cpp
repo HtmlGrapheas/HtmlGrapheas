@@ -28,6 +28,9 @@ namespace hg
 HgFont::HgFont()
     : mFtFace(nullptr)
     , mHbFont(nullptr)
+    , mPixelSize(0)
+    , mStrikeout(false)
+    , mUnderline(false)
 {
   mFcConfig = FcInitLoadConfigAndFonts();
   FT_Init_FreeType(&mFtLibrary);
