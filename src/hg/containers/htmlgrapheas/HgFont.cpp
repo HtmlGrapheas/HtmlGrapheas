@@ -46,7 +46,7 @@ std::string HgFont::getFontFilePath(const std::string& names,
     int pixelSize,
     int weight,
     litehtml::font_style fontStyle,
-    uint_least8_t* result)
+    uint_least8_t* result) const
 {
   std::string ret = "";
 
@@ -132,11 +132,12 @@ std::string HgFont::getFontFilePath(const std::string& names,
   return ret;
 }
 
-bool HgFont::createFtFace(std::string& fontFilePath, int pixelSize)
+bool HgFont::createFtFace(const std::string& fontFilePath, int pixelSize)
 {
   bool ret = destroyFtFace()
-      && !FT_New_Face(mFtLibrary, fontFilePath.c_str(), 0, &mFtFace)
-      && !FT_Set_Pixel_Sizes(mFtFace, 0, pixelSize)
+      && (FT_New_Face(mFtLibrary, fontFilePath.c_str(), 0, &mFtFace)
+                 == FT_Err_Ok)
+      && (FT_Set_Pixel_Sizes(mFtFace, 0, pixelSize) == FT_Err_Ok)
       && (mHbFont = hb_ft_font_create(mFtFace, NULL));
   if(!ret) {
     destroyFtFace();
@@ -155,6 +156,14 @@ bool HgFont::destroyFtFace()
     mFtFace = nullptr;
   }
   return true;
+}
+
+FT_F26Dot6 HgFont::xHeight() const
+{
+  if(!mFtFace || FT_Load_Char(mFtFace, 'x', 0) != FT_Err_Ok) {
+    return 0;
+  }
+  return mFtFace->glyph->metrics.height;
 }
 
 }  // namespace hg

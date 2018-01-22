@@ -75,5 +75,6 @@ TEST(HgFontTest, createFtFace)
   EXPECT_TRUE(ends_with(filePath, "NotoSans-Regular.ttf"));
 
   EXPECT_TRUE(hgFont.createFtFace(filePath, pixelSize));
+  EXPECT_EQ(hg::HgFont::f26Dot6ToInt(hgFont.xHeight()), 9);
   EXPECT_TRUE(hgFont.destroyFtFace());
 }

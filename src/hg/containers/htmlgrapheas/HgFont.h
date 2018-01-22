@@ -61,14 +61,20 @@ public:
       int pixelSize,
       int weight,
       litehtml::font_style fontStyle,
-      uint_least8_t* result);
+      uint_least8_t* result) const;
 
-  virtual bool createFtFace(std::string& fontFilePath, int pixelSize);
+  virtual bool createFtFace(const std::string& fontFilePath, int pixelSize);
   virtual bool destroyFtFace();
 
+  virtual const FT_Face ftFace() const;
+  virtual FT_F26Dot6 xHeight() const;
+
+  static FT_F26Dot6 intToF26Dot6(int pixelSize);
+  static int f26Dot6ToInt(FT_F26Dot6 f26Dot6Pixels);
+
 private:
-  int weightToFcWeight(int weigh);
-  int fontStyleToFcSlant(litehtml::font_style fontStyle);
+  int weightToFcWeight(int weigh) const;
+  int fontStyleToFcSlant(litehtml::font_style fontStyle) const;
 
 private:
   FcConfig* mFcConfig;
@@ -80,7 +86,12 @@ private:
   hb_font_t* mHbFont;
 };  // class HgFont
 
-inline int HgFont::weightToFcWeight(int weight)
+inline const FT_Face HgFont::ftFace() const
+{
+  return mFtFace;
+}
+
+inline int HgFont::weightToFcWeight(int weight) const
 {
   if(weight >= 0 && weight < 150)
     return FC_WEIGHT_THIN;
@@ -104,7 +115,7 @@ inline int HgFont::weightToFcWeight(int weight)
     return FC_WEIGHT_NORMAL;
 }
 
-inline int HgFont::fontStyleToFcSlant(litehtml::font_style fontStyle)
+inline int HgFont::fontStyleToFcSlant(litehtml::font_style fontStyle) const
 {
   switch(fontStyle) {
     case litehtml::fontStyleItalic:
@@ -113,6 +124,16 @@ inline int HgFont::fontStyleToFcSlant(litehtml::font_style fontStyle)
     default:
       return FC_SLANT_ROMAN;
   }
+}
+
+inline FT_F26Dot6 HgFont::intToF26Dot6(int pixelSize)
+{
+  return static_cast<FT_Long>(pixelSize) * 64;
+}
+
+inline int HgFont::f26Dot6ToInt(FT_F26Dot6 f26Dot6Pixels)
+{
+  return static_cast<int>(f26Dot6Pixels / 64);
 }
 
 }  // namespace hg
