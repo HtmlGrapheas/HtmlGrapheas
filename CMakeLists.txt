@@ -96,7 +96,7 @@ set(hg_HEADERS
 )
 
 set(hg_SOURCES
-  ${PROJECT_SOURCE_DIR}/src/hg/dummy.cpp
+  ${PROJECT_SOURCE_DIR}/src/hgraph/dummy.cpp
 )
 
 # HtmlGrapheas
@@ -106,7 +106,7 @@ set_target_properties(${hg_LIB_NAME} PROPERTIES
   C_STANDARD 11
 )
 # Export HtmlGrapheas includes.
-target_include_directories(${hg_LIB_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src/hg)
+target_include_directories(${hg_LIB_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
 # LiteHtml
 # TODO: Change PUBLIC to PRIVATE for litehtml includes.
