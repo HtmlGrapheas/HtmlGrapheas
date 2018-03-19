@@ -84,9 +84,12 @@ set_target_properties(${lh_LIB_NAME} PROPERTIES
   CXX_STANDARD 11
   C_STANDARD 11
 )
-
-if(WIN32)
-  target_include_directories(${lh_LIB_NAME} PUBLIC
-    ${LITEHTML_SRC_DIR}/src/gumbo
-  )
+# Export gumbo includes.
+#target_include_directories(${lh_LIB_NAME} PUBLIC ${LITEHTML_SRC_DIR}/src/gumbo)
+if(MSVC) # TODO: we need it?
+    target_include_directories(${lh_LIB_NAME} PUBLIC
+        ${LITEHTML_SRC_DIR}/src/gumbo/visualc/include>)
 endif()
+# Export litehtml includes.
+target_include_directories(${lh_LIB_NAME} PUBLIC ${LITEHTML_SRC_DIR}/src)
+target_include_directories(${lh_LIB_NAME} PUBLIC ${LITEHTML_SRC_DIR}/include)
