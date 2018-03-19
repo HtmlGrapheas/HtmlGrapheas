@@ -110,5 +110,4 @@ target_include_directories(${hg_LIB_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
 # LiteHtml
 # TODO: Change PUBLIC to PRIVATE for litehtml includes.
-target_include_directories(${hg_LIB_NAME} PUBLIC ${LITEHTML_SRC_DIR}/include)
-target_link_libraries(${hg_LIB_NAME} PRIVATE litehtml)
+target_link_libraries(${hg_LIB_NAME} PUBLIC litehtml)
