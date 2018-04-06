@@ -80,6 +80,10 @@ list(APPEND CMAKE_MODULE_PATH
 set(LITEHTML_SRC_DIR "${PROJECT_SOURCE_DIR}/external/litehtml")
 set(LITEHTML_CMAKE_DIR "${PROJECT_SOURCE_DIR}/cmake/litehtml")
 
+if(WIN32 OR WINCE)
+  add_definitions(-DLITEHTML_UTF8)
+endif()
+
 add_subdirectory(${LITEHTML_CMAKE_DIR})
 
 
