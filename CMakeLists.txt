@@ -81,7 +81,8 @@ set(LITEHTML_SRC_DIR "${PROJECT_SOURCE_DIR}/external/litehtml")
 set(LITEHTML_CMAKE_DIR "${PROJECT_SOURCE_DIR}/cmake/litehtml")
 
 if(WIN32 OR WINCE)
-  add_definitions(-DLITEHTML_UTF8)
+  set(LITEHTML_UTF8 "LITEHTML_UTF8")
+  add_definitions(-D${LITEHTML_UTF8})
 endif()
 
 add_subdirectory(${LITEHTML_CMAKE_DIR})
@@ -109,6 +110,9 @@ set_target_properties(${hg_LIB_NAME} PROPERTIES
   CXX_STANDARD 11
   C_STANDARD 11
 )
+if(LITEHTML_UTF8)
+  target_compile_definitions(${hg_LIB_NAME} PUBLIC -D${LITEHTML_UTF8})
+endif()
 # Export HtmlGrapheas includes.
 target_include_directories(${hg_LIB_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
