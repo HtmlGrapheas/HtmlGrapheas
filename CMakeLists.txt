@@ -28,6 +28,18 @@ set(hg_LIB_NAME "htmlgrapheas")
 
 
 #-----------------------------------------------------------------------
+# Configure external libs directories.
+#-----------------------------------------------------------------------
+
+if(NOT EXTERNAL_BIN_DIR)
+  set(EXTERNAL_BIN_DIR "${PROJECT_BINARY_DIR}/external/build")
+endif()
+if(NOT EXTERNAL_INSTALL_DIR)
+  set(EXTERNAL_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}")
+endif()
+
+
+#-----------------------------------------------------------------------
 # Configure to find_package.
 #-----------------------------------------------------------------------
 
@@ -77,15 +89,33 @@ list(APPEND CMAKE_MODULE_PATH
 # LiteHtml
 #-----------------------------------------------------------------------
 
-set(LITEHTML_SRC_DIR "${PROJECT_SOURCE_DIR}/external/litehtml")
-set(LITEHTML_CMAKE_DIR "${PROJECT_SOURCE_DIR}/cmake/litehtml")
-
 if(WIN32 OR WINCE)
   set(LITEHTML_UTF8 "LITEHTML_UTF8")
   add_definitions(-D${LITEHTML_UTF8})
 endif()
 
-add_subdirectory(${LITEHTML_CMAKE_DIR})
+set(LITEHTML_CMAKE_DIR "${PROJECT_SOURCE_DIR}/cmake/litehtml")
+set(LITEHTML_SRC_DIR "${PROJECT_SOURCE_DIR}/external/litehtml")
+set(LITEHTML_BUILD_DIR "${EXTERNAL_BIN_DIR}/build_litehtml")
+set(LITEHTML_EXPORT_FILE "${LITEHTML_BUILD_DIR}/export-litehtml.cmake")
+
+if(NOT EXISTS ${LITEHTML_EXPORT_FILE})
+  cmr_print_message("liteheml is not built, build it.")
+
+  # TODO: replace LITEHTML_CMAKE_DIR with LITEHTML_SRC_DIR.
+  #add_subdirectory(${LITEHTML_SRC_DIR} ${LITEHTML_BUILD_DIR})
+  add_subdirectory(${LITEHTML_CMAKE_DIR} ${LITEHTML_BUILD_DIR})
+  
+  export(
+    TARGETS litehtml
+    FILE ${LITEHTML_EXPORT_FILE}
+    EXPORT_LINK_INTERFACE_LIBRARIES
+  )
+
+else()
+  cmr_print_message("liteheml is built, skip its building.")
+  include(${LITEHTML_EXPORT_FILE})
+endif()
 
 
 #-----------------------------------------------------------------------
