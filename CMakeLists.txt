@@ -86,6 +86,34 @@ list(APPEND CMAKE_MODULE_PATH
 
 
 #-----------------------------------------------------------------------
+# Gumbo
+#-----------------------------------------------------------------------
+
+set(GUMBO_CMAKE_DIR "${PROJECT_SOURCE_DIR}/cmake/gumbo")
+set(GUMBO_SRC_DIR "${PROJECT_SOURCE_DIR}/external/litehtml/src/gumbo")
+set(GUMBO_BUILD_DIR "${EXTERNAL_BIN_DIR}/build_gumbo")
+set(GUMBO_EXPORT_FILE "${GUMBO_BUILD_DIR}/export-gumbo.cmake")
+
+if(NOT EXISTS ${GUMBO_EXPORT_FILE})
+  cmr_print_message("gumbo is not built, build it.")
+
+  # TODO: replace GUMBO_CMAKE_DIR with GUMBO_SRC_DIR.
+  #add_subdirectory(${GUMBO_SRC_DIR} ${GUMBO_BUILD_DIR})
+  add_subdirectory(${GUMBO_CMAKE_DIR} ${GUMBO_BUILD_DIR})
+  
+  export(
+    TARGETS gumbo
+    FILE ${GUMBO_EXPORT_FILE}
+    EXPORT_LINK_INTERFACE_LIBRARIES
+  )
+
+else()
+  cmr_print_message("gumbo is built, skip its building.")
+  include(${GUMBO_EXPORT_FILE})
+endif()
+
+
+#-----------------------------------------------------------------------
 # LiteHtml
 #-----------------------------------------------------------------------
 
@@ -100,7 +128,7 @@ set(LITEHTML_BUILD_DIR "${EXTERNAL_BIN_DIR}/build_litehtml")
 set(LITEHTML_EXPORT_FILE "${LITEHTML_BUILD_DIR}/export-litehtml.cmake")
 
 if(NOT EXISTS ${LITEHTML_EXPORT_FILE})
-  cmr_print_message("liteheml is not built, build it.")
+  cmr_print_message("litehtml is not built, build it.")
 
   # TODO: replace LITEHTML_CMAKE_DIR with LITEHTML_SRC_DIR.
   #add_subdirectory(${LITEHTML_SRC_DIR} ${LITEHTML_BUILD_DIR})
@@ -113,7 +141,7 @@ if(NOT EXISTS ${LITEHTML_EXPORT_FILE})
   )
 
 else()
-  cmr_print_message("liteheml is built, skip its building.")
+  cmr_print_message("litehtml is built, skip its building.")
   include(${LITEHTML_EXPORT_FILE})
 endif()
 

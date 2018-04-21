@@ -65,31 +65,14 @@ set(SOURCE_LITEHTML
   ${LITEHTML_SRC_DIR}/src/web_color.cpp
 )
 
-set(SOURCE_GUMBO
-  ${LITEHTML_SRC_DIR}/src/gumbo/attribute.c
-  ${LITEHTML_SRC_DIR}/src/gumbo/char_ref.c
-  ${LITEHTML_SRC_DIR}/src/gumbo/error.c
-  ${LITEHTML_SRC_DIR}/src/gumbo/parser.c
-  ${LITEHTML_SRC_DIR}/src/gumbo/string_buffer.c
-  ${LITEHTML_SRC_DIR}/src/gumbo/string_piece.c
-  ${LITEHTML_SRC_DIR}/src/gumbo/tag.c
-  ${LITEHTML_SRC_DIR}/src/gumbo/tokenizer.c
-  ${LITEHTML_SRC_DIR}/src/gumbo/utf8.c
-  ${LITEHTML_SRC_DIR}/src/gumbo/util.c
-  ${LITEHTML_SRC_DIR}/src/gumbo/vector.c
-)
-
-add_library(${lh_LIB_NAME} ${SOURCE_LITEHTML} ${SOURCE_GUMBO})
+add_library(${lh_LIB_NAME} ${SOURCE_LITEHTML})
 set_target_properties(${lh_LIB_NAME} PROPERTIES
   CXX_STANDARD 11
   C_STANDARD 11
 )
-if(MSVC)
-  # Export gumbo includes.
-  target_include_directories(${lh_LIB_NAME} PRIVATE
-    ${LITEHTML_SRC_DIR}/src/gumbo/visualc/include
-  )
-endif()
 # Export litehtml includes.
 target_include_directories(${lh_LIB_NAME} PUBLIC ${LITEHTML_SRC_DIR}/src)
 target_include_directories(${lh_LIB_NAME} PUBLIC ${LITEHTML_SRC_DIR}/include)
+
+# Gumbo
+target_link_libraries(${lh_LIB_NAME} PUBLIC gumbo)
