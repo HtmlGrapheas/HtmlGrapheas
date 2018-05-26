@@ -128,7 +128,8 @@ set(hg_HEADERS
 )
 
 set(hg_SOURCES
-  ${PROJECT_SOURCE_DIR}/src/hgraph/dummy.cpp
+  # TODO: remove it from disk.
+  ${PROJECT_SOURCE_DIR}/src/hgraph/stub.cpp
 )
 
 # HtmlGrapheas
