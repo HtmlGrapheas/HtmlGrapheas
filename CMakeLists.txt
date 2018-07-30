@@ -119,15 +119,15 @@ endif()
 # HtmlGrapheas
 #-----------------------------------------------------------------------
 
-set(private_src_DIR "${CMAKE_CURRENT_LIST_DIR}/src") 
-set(interface_src_DIR "${CMAKE_INSTALL_INCLUDEDIR}") 
-set(build_src_DIR 
+set(private_src_DIR "${CMAKE_CURRENT_LIST_DIR}/src")
+set(interface_src_DIR "${CMAKE_INSTALL_INCLUDEDIR}")
+set(build_src_DIR
   "$<BUILD_INTERFACE:${private_src_DIR}>"
 )
-set(install_src_DIR 
+set(install_src_DIR
   "$<INSTALL_INTERFACE:${interface_src_DIR}>"
 )
-set(public_src_DIR "${build_src_DIR}${install_src_DIR}") 
+set(public_src_DIR "${build_src_DIR}${install_src_DIR}")
 
 add_library(${lib_NAME} "")
 set_target_properties(${lib_NAME} PROPERTIES
