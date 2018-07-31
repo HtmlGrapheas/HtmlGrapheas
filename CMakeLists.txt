@@ -65,7 +65,7 @@ if(NOT LIBCMAKER_SRC_DIR)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH
-  "${CMAKE_CURRENT_LIST_DIR}/cmake"
+#  "${CMAKE_CURRENT_LIST_DIR}/cmake"
   "${LIBCMAKER_SRC_DIR}/cmake/modules"
 )
 
