@@ -1,3 +1,3 @@
-[submodule "litehtml"]
+[submodule "external/litehtml"]
 	path = external/litehtml
 	url = git@bitbucket.org:htmlgrapheas/litehtml.git
