@@ -94,7 +94,7 @@ set(LITEHTML_BUILD_DIR    "${EXTERNAL_BIN_DIR}/build_litehtml")
 set(LITEHTML_EXPORT_FILE  "${LITEHTML_BUILD_DIR}/export-litehtml.cmake")
 
 if(NOT EXISTS ${LITEHTML_EXPORT_FILE})
-  cmr_print_message("litehtml is not built, build it.")
+  cmr_print_status("litehtml is not built, build it.")
 
   add_subdirectory(${LITEHTML_SRC_DIR} ${LITEHTML_BUILD_DIR})
   
@@ -105,7 +105,7 @@ if(NOT EXISTS ${LITEHTML_EXPORT_FILE})
   )
 
 else()
-  cmr_print_message("litehtml is built, skip its building.")
+  cmr_print_status("litehtml is built, skip its building.")
   include(${LITEHTML_EXPORT_FILE})
 endif()
 
