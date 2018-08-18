@@ -30,47 +30,6 @@ include(GNUInstallDirs)
 
 
 #-----------------------------------------------------------------------
-# Configure external libs directories
-#-----------------------------------------------------------------------
-
-set(EXTERNAL_SRC_DIR "${CMAKE_CURRENT_LIST_DIR}/external")
-if(NOT EXTERNAL_BIN_DIR)
-  set(EXTERNAL_BIN_DIR "${PROJECT_BINARY_DIR}/external/build")
-endif()
-if(NOT EXTERNAL_INSTALL_DIR)
-  set(EXTERNAL_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}")
-  set(CMAKE_INSTALL_PREFIX "${EXTERNAL_INSTALL_DIR}")
-endif()
-
-
-#-----------------------------------------------------------------------
-# Configure to find_package()
-#-----------------------------------------------------------------------
-
-# Set CMake's search path for find_*() commands.
-list(APPEND CMAKE_PREFIX_PATH "${EXTERNAL_INSTALL_DIR}")
-
-if(ANDROID)
-  list(APPEND CMAKE_FIND_ROOT_PATH "${EXTERNAL_INSTALL_DIR}")
-endif()
-
-
-#-----------------------------------------------------------------------
-# Set path to LibCMaker root
-#-----------------------------------------------------------------------
-
-if(NOT LIBCMAKER_SRC_DIR)
-  message(FATAL_ERROR
-    "Please set LIBCMAKER_SRC_DIR with path to LibCMaker root.")
-endif()
-
-list(APPEND CMAKE_MODULE_PATH
-#  "${CMAKE_CURRENT_LIST_DIR}/cmake"
-  "${LIBCMAKER_SRC_DIR}/cmake/modules"
-)
-
-
-#-----------------------------------------------------------------------
 # Set vars to HtmlGrapheas
 #-----------------------------------------------------------------------
 
@@ -78,41 +37,6 @@ list(APPEND CMAKE_MODULE_PATH
 #set(BUILD_SHARED_LIBS ON)
 
 # Library specific vars.
-
-
-#-----------------------------------------------------------------------
-# LiteHtml
-#-----------------------------------------------------------------------
-
-if(WIN32 OR WINCE)
-  set(LITEHTML_UTF8 "LITEHTML_UTF8")
-  add_definitions(-D${LITEHTML_UTF8})
-endif()
-
-set(LITEHTML_SRC_DIR      "${EXTERNAL_SRC_DIR}/litehtml")
-set(LITEHTML_BUILD_DIR    "${EXTERNAL_BIN_DIR}/build_litehtml")
-set(LITEHTML_EXPORT_FILE  "${LITEHTML_BUILD_DIR}/export-litehtml.cmake")
-
-if(NOT EXISTS ${LITEHTML_EXPORT_FILE})
-  cmr_print_status("litehtml is not built, build it.")
-
-  add_subdirectory(${LITEHTML_SRC_DIR} ${LITEHTML_BUILD_DIR})
-  
-  export(
-    TARGETS gumbo litehtml
-    FILE ${LITEHTML_EXPORT_FILE}
-    EXPORT_LINK_INTERFACE_LIBRARIES
-  )
-
-else()
-  cmr_print_status("litehtml is built, skip its building.")
-  include(${LITEHTML_EXPORT_FILE})
-endif()
-
-
-#-----------------------------------------------------------------------
-# find_package()
-#-----------------------------------------------------------------------
 
 
 #-----------------------------------------------------------------------
