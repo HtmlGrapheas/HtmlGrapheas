@@ -33,11 +33,6 @@ include(GNUInstallDirs)
 # Set vars to HtmlGrapheas
 #-----------------------------------------------------------------------
 
-# Standard CMake vars.
-#set(BUILD_SHARED_LIBS ON)
-
-# Library specific vars.
-
 
 #-----------------------------------------------------------------------
 # HtmlGrapheas
